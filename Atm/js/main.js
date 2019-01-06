@@ -25,6 +25,7 @@ function start(e) {
   e.currentTarget.style.opacity = 0;
 
   allAtm.forEach(atm => {
+    // Объект Банкомат следит за объектом Очередь
     queue.addListener(atm.checkQueue);
     if (atm.servicing === false) {
       atm.servicingClient();

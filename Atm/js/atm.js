@@ -37,7 +37,7 @@ function Atm(container, servicingTime) {
     self.servicing = true;
     self.container.style.backgroundColor = "red";
     self.client.style.backgroundColor = "black";
-    self.progressMove(self.servicingTime);
+    self.progressMove();
     setTimeout(() => {
       self.servicingClientEnd();
     }, self.servicingTime);
@@ -57,7 +57,7 @@ function Atm(container, servicingTime) {
   };
 
   self.progressMove = function(
-    servicingTime,
+    servicingTime = self.servicingTime,
     elem = self.progressBar,
     tick = self.tick
   ) {
