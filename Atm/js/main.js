@@ -31,7 +31,6 @@ function start(e) {
     atm.atmCounter.addEventListener(
       "clientServed",
       function() {
-        // console.log("событие сработало");
         if (atm.servicing === false) {
           atm.servicingClient();
           queue.move();
@@ -40,6 +39,6 @@ function start(e) {
       false
     );
 
-    atm.isFree();
+    atm.isFree(); // Инициализиуем работу банкоматов
   });
 }
