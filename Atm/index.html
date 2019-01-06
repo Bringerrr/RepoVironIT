@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <button id="startButton" class="button">Start App</button>
+    <div class="mainContainer">
+      <div class="atmContainer">
+        <div id="atmLeft" class="atm atmContainer__left">
+          <h4>Время обслуживания</h4>
+          <span>3 секунды</span>
+          <label for="atmCounter">Обслужено :</label>
+          <input type="text" value=0 class="atmCounter" name="atmCounter" ></input>
+          <div class = "clientAtAtm"></div>
+        </div>
+        <div id="atmRight" class="atm atmContainer__right">
+          <h4>Время обслуживания</h4>
+          <span>1,5 секунды</span>
+          <label for="atmCounter">Обслужено :</label>
+          <input type="text" value=0 class="atmCounter" name="atmCounter" ></input>
+          <div class = "clientAtAtm"></div>
+        </div>
+      </div>
+      <div id="queue" class="queue"></div>
+    </div>
+
+    <script src="js/store.js"></script>
+    <script src="js/observer.js"></script>
+    <script src="js/atm.js"></script>
+    <script src="js/queue.js"></script>
+    <script src="js/main.js"></script>
+    
+  </body>
+</html>
