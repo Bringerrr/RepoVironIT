@@ -26,11 +26,14 @@ function Atm(container, servicingTime) {
   // });
 
   self.checkQueue = function(clients) {
-    //
     self.clientsLeft = clients;
     console.log(
       "Банкомат узнал, что в очереди осталось: " + clients + " человек"
     );
+  };
+
+  self.isFree = function() {
+    self.atmCounter.dispatchEvent(self.clientServedEvent); // тригерим событие
   };
 
   self.servicingClient = function() {
@@ -42,8 +45,7 @@ function Atm(container, servicingTime) {
       self.servicingClientEnd();
     }, self.servicingTime);
     setTimeout(() => {
-      if (self.clientsLeft > 0)
-        self.atmCounter.dispatchEvent(self.clientServedEvent); // тригерим событие
+      if (self.clientsLeft > 0) self.isFree();
       // clientServedEvent.trigger("event"); // триггер события eventEmmiter
     }, self.servicingTime + self.timeGap);
   };

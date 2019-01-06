@@ -26,11 +26,8 @@ function start(e) {
 
   allAtm.forEach(atm => {
     // Объект Банкомат следит за объектом Очередь
+    // debugger;
     queue.addListener(atm.checkQueue);
-    if (atm.servicing === false) {
-      atm.servicingClient();
-      queue.move();
-    }
     atm.atmCounter.addEventListener(
       "clientServed",
       function() {
@@ -42,5 +39,7 @@ function start(e) {
       },
       false
     );
+
+    atm.isFree();
   });
 }
