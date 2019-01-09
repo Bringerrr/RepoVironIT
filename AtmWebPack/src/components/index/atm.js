@@ -1,3 +1,7 @@
+// раздели Atm на Atm (с логикой) и AtmComponent, который будет отвечать за рендер Atm'a.
+// Просто AtmComponent подпиши на изменения Atm.
+// Все методы, отвечающие за рендер вызывай по соответствующим ивентам от Atm.
+// В таком случае тебе будет легче сопровождать код, при возникновении ошибок
 export default class Atm {
   constructor(container, servicingTime, id, className) {
     let self = this;
@@ -21,8 +25,13 @@ export default class Atm {
 
     this.client = null; // Обслуживаемый клиент
     this.progressBar = null; // Обслуживаемый клиент
+    // почему не использовать EventEmitter, который написал. Atm, который с логикой наследовал бы от EventEmitter'a
     this.atmIsFreeEvent = new Event("atmIsFree"); // создаем кастомное событие
 
+    // вообще банкомату незачем знать, сколько людей в очереди, но...
+    // почему self? при вызове atm.checkQueue, чему будет равен this? а если передаешь эту функцию как функтор
+    // в addListener, то можно использовать atm.checkQueue.bind(atm), либо сразу в конструкторе можно написать
+    // this.checkQueue = this.checkQueue.bind(this). Таким образом ты привяжешь сразу контекст этой функции.
     this.checkQueue = function(clients) {
       self.clientsLeft = clients;
       if (self.clientsLeft > 0) {
@@ -38,10 +47,13 @@ export default class Atm {
     };
   }
 
+  // никогда бы не подумал, что isFree() - метод который тригерит событие, если бы читал интерфейс класса, то подумал,
+  // что это проверка, свободен ли банкомат
   isFree() {
     this.atmCounter.dispatchEvent(this.atmIsFreeEvent); // тригерим событие
   }
 
+  // вот в этом методе я бы тригерил событие, что банкомат стал "занят"
   servicingClient() {
     this.progressMove();
     this.servicing = true;
@@ -59,6 +71,7 @@ export default class Atm {
     }, this.servicingTime + this.timeGap);
   }
 
+  // а в этом тригерил бы, что "свободен"
   servicingClientEnd() {
     this.servicing = false;
     this.coreContainer.style.backgroundColor = "";
@@ -91,6 +104,7 @@ export default class Atm {
   createElement(elementTagName, params = {}) {
     let elem = document.createElement(elementTagName);
     for (let key in params) {
+      // а если в params нет метода hasOwnProperty?))
       if (params.hasOwnProperty(key)) {
         elem[key] = params[key];
       }

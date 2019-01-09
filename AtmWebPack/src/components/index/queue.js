@@ -1,3 +1,4 @@
+// тоже самое, что и с Atm, разделяй логику от рендера
 export default class Queue {
   constructor(container) {
     this.container = container;
@@ -32,6 +33,7 @@ export default class Queue {
   // Удаляем человека вначале очереди
   remove() {
     let cont = this.container;
+    // зачем querySelectorAll, если ссылки на HTMLElement'ы у тебя в this.clients
     cont.removeChild(cont.querySelectorAll("div")[0]);
   }
 

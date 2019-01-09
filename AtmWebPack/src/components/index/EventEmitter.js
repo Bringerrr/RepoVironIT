@@ -18,6 +18,7 @@ class EventEmitter {
     }
 
     this.events[eventName].push(fn);
+    // отлично! я и забыл вам дать в задание реализацию отписки
     return () => {
       this.events[eventName] = this.events[eventName].filter(
         eventFn => fn !== eventFn
