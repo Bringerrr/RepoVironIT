@@ -1,46 +1,50 @@
-function Queue(container) {
-  let listeners = []; // здесь список функций, которые надо вызвать
+export default class Queue {
+  constructor(container) {
+    this.container = container;
+    this.amount = 0;
+    this.container = container; // Контейнер для очереди
+    this.clients = [];
+    this.listeners = []; // здесь список функций, которые надо вызвать
+  }
 
-  this.amount = 0;
-  this.container = container; // Контейнер для очереди
-  this.clients = [];
-
-  this.addListener = function(func) {
-    listeners.push(func);
+  addListener(func) {
+    this.listeners.push(func);
     func(this.amount); // и сразу вызываем функцию, передаём количество клиентов
-  };
+    console.log(this.listeners);
+  }
 
   // Задаём количество человек
-  this.setAmount = function(client) {
+  setAmount(client) {
     this.amount = client;
-  };
+  }
 
   // Первоначальный рендеринг
-  this.render = function() {
+  render() {
     for (let i = 0; i < this.amount; i++) {
       let client = document.createElement("div");
       this.clients.push(client);
     }
     this.clients.forEach(client => {
-      container.appendChild(client);
+      this.container.appendChild(client);
     });
-  };
+  }
 
   // Удаляем человека вначале очереди
-  this.remove = function() {
+  remove() {
     let cont = this.container;
     cont.removeChild(cont.querySelectorAll("div")[0]);
-  };
+  }
 
   // Движение очереди
-  this.move = function() {
+  move() {
     if (this.amount > 0) {
       this.amount -= 1;
       this.remove();
-      for (var f = 0; f < listeners.length; f++) {
-        var func = listeners[f]; // func - это функция-слушатель
+
+      for (let f = 0; f < this.listeners.length; f++) {
+        let func = this.listeners[f];
         func(this.amount); // вызываем её, передаём количество клиентов и что ещё надо
       }
     }
-  };
+  }
 }

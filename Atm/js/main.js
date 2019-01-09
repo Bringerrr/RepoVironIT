@@ -23,17 +23,16 @@ const queue = new Queue(queueContaier, queueSize);
 // Массив объектов для дальшейней подписки событий
 const allAtm = [atmLeft, atmRight];
 
-testAppButton.addEventListener("click", () => {
-  testAppButton.style.opacity = 0;
-  atmLeft.createElements();
-  atmRight.createElements();
-});
+testAppButton.style.opacity = 0;
+atmLeft.createElements();
+atmRight.createElements();
 
-queueAppButton.addEventListener("click", () => {
-  queueAppButton.style.opacity = 0;
-  queue.setAmount(queueSize); // Задаем длинну
-  queue.render(); // Рендерим элементы
-});
+testAppButton.addEventListener("click", () => {});
+queueAppButton.style.opacity = 0;
+queue.setAmount(queueSize); // Задаем длинну
+queue.render(); // Рендерим элементы
+
+queueAppButton.addEventListener("click", () => {});
 
 console.log(atmLeft);
 

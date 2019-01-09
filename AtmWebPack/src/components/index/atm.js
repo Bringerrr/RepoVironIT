@@ -1,74 +1,76 @@
-function Atm(
-  container,
-  servicingTime,
-  id,
-  className = { container, atmCounter, clientAtAtm, myProgressBar }
-) {
-  let self = this;
+export default class Atm {
+  constructor(container, servicingTime, id, className) {
+    let self = this;
+    this.container = container;
+    this.servicingTime = servicingTime;
+    this.id = id;
+    this.className = className;
+    this.count = 0; // Всего обслужено клиентов
+    this.container = container;
+    this.coreContainer = null;
+    this.id = id; // Наименование айдишника
+    this.className = className; // Наименование класса
+    this.servicing = false; // Обслуживание клиента
+    this.servicingTime = parseInt(servicingTime); // Время на обслуживание в миллисекундах
+    this.timeGap = 2000; // Промежуток между тем как банкомат закончил обслуживание
+    //клиента и приступил к обслуживание другого
+    self.clientsLeft = 0; // Осталось клиентов в очереди
+    this.tick = 50;
 
-  self.count = 0; // Всего обслужено клиентов
-  self.container = container;
-  self.coreContainer = HTMLDivElement;
-  self.id = id; // Наименование айдишника
-  self.className = className; // Наименование класса
-  self.servicing = false; // Обслуживание клиента
-  self.servicingTime = parseInt(servicingTime); // Время на обслуживание в миллисекундах
-  self.timeGap = 2000; // Промежуток между тем как банкомат закончил обслуживание
-  //клиента и приступил к обслуживание другого
-  self.clientsLeft = 0; // Осталось клиентов в очереди
-  self.tick = 50;
+    this.atmCounter = "";
 
-  self.atmCounter = "";
+    this.client = null; // Обслуживаемый клиент
+    this.progressBar = null; // Обслуживаемый клиент
+    this.atmIsFreeEvent = new Event("atmIsFree"); // создаем кастомное событие
 
-  self.client = HTMLDivElement; // Обслуживаемый клиент
-  self.progressBar = HTMLDivElement; // Обслуживаемый клиент
+    this.checkQueue = function(clients) {
+      self.clientsLeft = clients;
+      if (self.clientsLeft > 0) {
+        console.log(self.clientsLeft);
+      }
+      console.log(
+        `Банкомат узнал, что в очереди осталось:  ${clients}  человек`
+      );
+    };
 
-  self.clientServedEvent = new Event("clientServed"); // создаем кастомное событие
+    this.showClients = function(clients) {
+      console.log("Принимамаю" + clients);
+    };
+  }
 
-  // const clientServedEvent = new EventEmmiter();
-  // clientServedEvent.on("event", () => {
-  //   console.log("clientServed!");
-  // });
+  isFree() {
+    this.atmCounter.dispatchEvent(this.atmIsFreeEvent); // тригерим событие
+  }
 
-  // self.atmCounter.addEventListener("event", () => {
-  //   console.log("event triggered");
-  // });
+  servicingClient() {
+    this.progressMove();
+    this.servicing = true;
+    this.coreContainer.style.backgroundColor = "red";
+    this.client.style.backgroundColor = "black";
 
-  self.checkQueue = function(clients) {
-    self.clientsLeft = clients;
-    console.log(`Банкомат узнал, что в очереди осталось:  ${clients}  человек`);
-  };
-
-  self.isFree = function() {
-    self.atmCounter.dispatchEvent(self.clientServedEvent); // тригерим событие
-  };
-
-  self.servicingClient = function() {
-    self.servicing = true;
-    self.coreContainer.style.backgroundColor = "red";
-    self.client.style.backgroundColor = "black";
-    self.progressMove();
+    // debugger;
     setTimeout(() => {
-      self.servicingClientEnd();
-    }, self.servicingTime);
+      this.servicingClientEnd();
+    }, this.servicingTime);
     setTimeout(() => {
-      if (self.clientsLeft > 0) self.isFree();
-      // clientServedEvent.trigger("event"); // триггер события eventEmmiter
-    }, self.servicingTime + self.timeGap);
-  };
+      if (self.clientsLeft > 0) {
+        this.isFree();
+      }
+    }, this.servicingTime + this.timeGap);
+  }
 
-  self.servicingClientEnd = function() {
-    self.servicing = false;
-    self.coreContainer.style.backgroundColor = "";
-    self.client.style.backgroundColor = "";
-    self.count += 1;
-    self.atmCounter.value = self.count;
-  };
+  servicingClientEnd() {
+    this.servicing = false;
+    this.coreContainer.style.backgroundColor = "";
+    this.client.style.backgroundColor = "";
+    this.count += 1;
+    this.atmCounter.value = this.count;
+  }
 
-  self.progressMove = function(
-    servicingTime = self.servicingTime,
-    elem = self.progressBar,
-    tick = self.tick
+  progressMove(
+    servicingTime = this.servicingTime,
+    elem = this.progressBar,
+    tick = this.tick
   ) {
     let step = (tick / servicingTime) * 100;
     let progress = 0;
@@ -76,6 +78,7 @@ function Atm(
     function frame() {
       if (progress >= 100) {
         elem.innerHTML = "Свободно";
+        console.log(self.clientsLeft);
         clearInterval(id);
       } else {
         progress += step;
@@ -83,19 +86,19 @@ function Atm(
         elem.innerHTML = Math.ceil(progress * 1) + "%";
       }
     }
-  };
+  }
 
-  self.createElement = function(elementTagName, params = {}) {
-    elem = document.createElement(elementTagName);
+  createElement(elementTagName, params = {}) {
+    let elem = document.createElement(elementTagName);
     for (let key in params) {
       if (params.hasOwnProperty(key)) {
         elem[key] = params[key];
       }
     }
     return elem;
-  };
+  }
 
-  // self.update = function(props = {}) {
+  // update = function(props = {}) {
   //   for (let key in props) {
   //     if (props.hasOwnProperty(key)) {
   //       elem[key] = props[key];
@@ -103,42 +106,42 @@ function Atm(
   //   }
   // };
 
-  self.createElements = function() {
-    coreContainer = self.createElement("div", {
-      id: self.id,
-      className: self.className.container
+  createElements() {
+    let coreContainer = this.createElement("div", {
+      id: this.id,
+      className: this.className.container
     });
 
-    title = self.createElement("h4", {
+    let title = this.createElement("h4", {
       innerHTML: "Время на обслуживание :"
     });
-    span = self.createElement("span", {
-      innerHTML: `${self.servicingTime / 1000}секунды`
+    let span = this.createElement("span", {
+      innerHTML: `${this.servicingTime / 1000}секунды`
     });
-    label = self.createElement("label", {
-      htmlFor: self.className.atmCounter,
+    let label = this.createElement("label", {
+      htmlFor: this.className.atmCounter,
       innerHTML: "Обслужено :"
     });
 
-    input = self.createElement("input", {
+    let input = this.createElement("input", {
       type: "text",
-      value: self.count,
-      name: self.className.atmCounter,
-      className: self.className.atmCounter
+      value: this.count,
+      name: this.className.atmCounter,
+      className: this.className.atmCounter
     });
 
-    clientAtAtm = self.createElement("div", {
-      className: self.className.clientAtAtm
+    let clientAtAtm = this.createElement("div", {
+      className: this.className.clientAtAtm
     });
-    myProgress = self.createElement("div", {
+    let myProgress = this.createElement("div", {
       className: "myProgress"
     });
-    myBar = self.createElement("div", {
+    let myBar = this.createElement("div", {
       innerHTML: "Свободно",
       className: "myBar"
     });
 
-    self.container.appendChild(coreContainer);
+    this.container.appendChild(coreContainer);
     coreContainer.appendChild(title);
     coreContainer.appendChild(span);
     coreContainer.appendChild(label);
@@ -147,15 +150,13 @@ function Atm(
     coreContainer.appendChild(myProgress);
     myProgress.appendChild(myBar);
 
-    self.atmCounter = input;
-    self.client = clientAtAtm;
-    self.progressBar = myBar;
-    self.coreContainer = coreContainer;
+    this.atmCounter = input;
+    this.client = clientAtAtm;
+    this.progressBar = myBar;
+    this.coreContainer = coreContainer;
 
     // mainContainer.appendChild(anotherCoreContainer);
 
-    console.log(mainContainer);
-
-    // self.createElement("h4", mainContainer);
-  };
+    // createElement("h4", mainContainer);
+  }
 }

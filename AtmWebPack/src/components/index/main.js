@@ -1,16 +1,21 @@
-// debugger;
+import Atm from "./atm.js";
+import Queue from "./queue.js";
+
 const queueContaier = document.getElementById("queue");
 const atmLeftContainer = document.getElementById("atmLeft");
 const atmRightContainer = document.getElementById("atmRight");
 const startAppButton = document.getElementById("startButton");
 const testAppButton = document.getElementById("testButton");
 const queueAppButton = document.getElementById("queuetestButton");
-const mainContainer = document.querySelector(".atmContainer");
+const mainContainer = document.getElementById("atmContainer");
+
+console.log(mainContainer);
 
 const queueSize = 10; // Длинна очереди
 
 const classMixins = {
-  container: "atm atmContainer__left",
+  // общие классы для всех банкоматов
+  container: "atm",
   atmCounter: "atmCounter",
   clientAtAtm: "clientAtAtm",
   myProgress: "myBar"
@@ -25,17 +30,19 @@ const allAtm = [atmLeft, atmRight];
 
 testAppButton.addEventListener("click", () => {
   testAppButton.style.opacity = 0;
-  atmLeft.createElements();
-  atmRight.createElements();
 });
+atmLeft.createElements();
+atmRight.createElements();
 
 queueAppButton.addEventListener("click", () => {
   queueAppButton.style.opacity = 0;
-  queue.setAmount(queueSize); // Задаем длинну
-  queue.render(); // Рендерим элементы
 });
 
-console.log(atmLeft);
+queue.setAmount(queueSize); // Задаем длинну
+queue.render(); // Рендерим элементы
+
+// console.log(atmLeft);
+// console.log(queue);
 
 startAppButton.addEventListener("click", start, false);
 
@@ -48,10 +55,9 @@ function start(e) {
 
   allAtm.forEach(atm => {
     // Объект Банкомат следит за объектом Очередь
-    // debugger;
     queue.addListener(atm.checkQueue);
     atm.atmCounter.addEventListener(
-      "clientServed",
+      "atmIsFree",
       function() {
         if (atm.servicing === false) {
           atm.servicingClient();

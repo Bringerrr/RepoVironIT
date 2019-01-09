@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode=development",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
-    "server": "webpack-dev-server"
+    "server": "webpack-dev-server --watch --mode=development"
   },
   "repository": "https://github.com/superjose/webpack-simple-example.git",
   "author": "Jose Asilis <superjose_49@hotmail.com>",
@@ -14,9 +14,11 @@
   "private": false,
   "dependencies": {
     "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.1",
     "webpack": "^4.17.1"
   },
   "devDependencies": {
+    "css-loader": "^2.1.0",
     "html-loader": "^0.5.5",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.4"
