@@ -1,5 +1,10 @@
 import Atm from "./atm.js";
 import Queue from "./queue.js";
+// import emitter from "./index/EEsingle.js";
+
+// emitter.on("myCustomEvent", function(x) {
+//   console.log(x);
+// });
 
 const queueContaier = document.getElementById("queue");
 const atmLeftContainer = document.getElementById("atmLeft");
@@ -9,7 +14,7 @@ const testAppButton = document.getElementById("testButton");
 const queueAppButton = document.getElementById("queuetestButton");
 const mainContainer = document.getElementById("atmContainer");
 
-console.log(mainContainer);
+// console.log(mainContainer);
 
 const queueSize = 10; // Длинна очереди
 

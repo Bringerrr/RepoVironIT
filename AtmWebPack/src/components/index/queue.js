@@ -1,6 +1,10 @@
+import EventEmitter from "./EventEmitter.js";
+import emitter from "./EEsingle.js";
+
 // тоже самое, что и с Atm, разделяй логику от рендера
-export default class Queue {
+export default class Queue extends EventEmitter {
   constructor(container) {
+    super();
     this.container = container;
     this.amount = 0;
     this.container = container; // Контейнер для очереди
@@ -33,6 +37,7 @@ export default class Queue {
   // Удаляем человека вначале очереди
   remove() {
     let cont = this.container;
+    console.log(this.clients);
     // зачем querySelectorAll, если ссылки на HTMLElement'ы у тебя в this.clients
     cont.removeChild(cont.querySelectorAll("div")[0]);
   }
@@ -42,11 +47,16 @@ export default class Queue {
     if (this.amount > 0) {
       this.amount -= 1;
       this.remove();
+      // emitter.emit("queueMoving", this.amount);
 
       for (let f = 0; f < this.listeners.length; f++) {
         let func = this.listeners[f];
         func(this.amount); // вызываем её, передаём количество клиентов и что ещё надо
       }
+      this.subscribe("queueMoving", data => {
+        console.log(data);
+        // observer2.innerHTML = `Your name is: ${data.amount}`;
+      });
     }
   }
 }

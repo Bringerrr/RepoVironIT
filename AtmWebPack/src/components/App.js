@@ -2,6 +2,18 @@ console.log("App.js confirmed");
 
 import "../styles/main.css";
 
+let arr = [1, 2, [3, 4, 5, [6, 7]]];
+let containers = [];
+const req = e => {
+  e.forEach((elem, index) => {
+    if (index === 0) containers.push(elem);
+    typeof elem === "object" && elem.length > 0 ? req(elem) : console.log(elem);
+  });
+  console.log(containers);
+};
+
+req(arr);
+
 // const queueContaier = document.getElementById("queue");
 // const atmLeftContainer = document.getElementById("atmLeft");
 // const atmRightContainer = document.getElementById("atmRight");
