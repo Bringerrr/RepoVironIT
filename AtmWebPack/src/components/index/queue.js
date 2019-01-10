@@ -1,5 +1,5 @@
 import EventEmitter from "./EventEmitter.js";
-import emitter from "./EEsingle.js";
+import emitter from "./EventEmitterSingleton.js";
 
 // тоже самое, что и с Atm, разделяй логику от рендера
 export default class Queue extends EventEmitter {

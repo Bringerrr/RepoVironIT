@@ -12,7 +12,7 @@ const req = e => {
   console.log(containers);
 };
 
-req(arr);
+// req(arr);
 
 // const queueContaier = document.getElementById("queue");
 // const atmLeftContainer = document.getElementById("atmLeft");

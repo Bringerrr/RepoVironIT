@@ -1,4 +1,5 @@
 import Atm from "./atm.js";
+import AtmRender from "./AtmRender.js";
 import Queue from "./queue.js";
 // import emitter from "./index/EEsingle.js";
 
@@ -29,6 +30,7 @@ const classMixins = {
 const atmLeft = new Atm(mainContainer, 3000, "atmLeft", classMixins);
 const atmRight = new Atm(mainContainer, 1500, "atmRight", classMixins);
 const queue = new Queue(queueContaier, queueSize);
+const atmRender = new AtmRender();
 
 // Массив объектов для дальшейней подписки событий
 const allAtm = [atmLeft, atmRight];
@@ -54,9 +56,10 @@ startAppButton.addEventListener("click", start, false);
 function start(e) {
   e = e || window.event;
   e.preventDefault();
-
   e.currentTarget.removeEventListener("click", start, false);
   e.currentTarget.style.opacity = 0;
+
+  atmRender.render();
 
   allAtm.forEach(atm => {
     // Объект Банкомат следит за объектом Очередь
@@ -72,6 +75,6 @@ function start(e) {
       false
     );
 
-    atm.isFree(); // Инициализиуем работу банкоматов
+    atm.servicingClientStart(); // Инициализиуем работу банкоматов
   });
 }

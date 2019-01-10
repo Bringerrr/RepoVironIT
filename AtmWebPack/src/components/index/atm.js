@@ -4,7 +4,7 @@
 // В таком случае тебе будет легче сопровождать код, при возникновении ошибок
 
 import EventEmitter from "./EventEmitter.js";
-import emitter from "./EEsingle.js";
+import emitter from "./EventEmitterSingleton.js";
 
 console.log(emitter);
 
@@ -13,12 +13,8 @@ export default class Atm extends EventEmitter {
   constructor(container, servicingTime, id, className) {
     super();
 
-    // this.emit = new EventEmitter();
-    // this.emit2 = new EventEmitter();
-    this.container = container;
     this.servicingTime = servicingTime;
     this.id = id;
-    this.className = className;
     this.count = 0; // Всего обслужено клиентов
     this.container = container;
     this.coreContainer = null;
@@ -58,40 +54,50 @@ export default class Atm extends EventEmitter {
   // никогда бы не подумал, что isFree() - метод который тригерит событие, если бы читал интерфейс класса, то подумал,
   // что это проверка, свободен ли банкомат
 
-  init() {}
+  init(e) {
+    emitter.emit(
+      "AtmRender",
+      this.container,
+      this.id,
+      this.className,
+      this.servicingTime,
+      this.count
+    );
+  }
 
-  isFree() {
+  delete(e) {
+    emitter.emit("AtmDelete", this.coreContainer, this.client);
+  }
+
+  servicingClientStart() {
+    emitter.emit("AtmIsBusy", this.coreContainer, this.client);
     this.atmCounter.dispatchEvent(this.atmIsFreeEvent); // тригерим событие
   }
 
   // вот в этом методе я бы тригерил событие, что банкомат стал "занят"
   servicingClient() {
-    emitter.emit("myCustomEvent", "zwaihander");
     this.progressMove();
     this.servicing = true;
-    this.coreContainer.style.backgroundColor = "red";
-    this.client.style.backgroundColor = "black";
-
+    // this.coreContainer.style.backgroundColor = "red";
+    // this.client.style.backgroundColor = "black";
     // debugger;
     setTimeout(() => {
       this.servicingClientEnd();
     }, this.servicingTime);
     setTimeout(() => {
       if (this.clientsLeft > 0) {
-        this.isFree();
+        this.servicingClientStart();
       }
     }, this.servicingTime + this.timeGap);
   }
 
   // а в этом тригерил бы, что "свободен"
+
   servicingClientEnd() {
-    this.emit("isFree", { status: this.servicing });
-    this.emit("isFreeToo", { statusNew: this.servicing });
     this.servicing = false;
-    this.coreContainer.style.backgroundColor = "";
-    this.client.style.backgroundColor = "";
     this.count += 1;
     this.atmCounter.value = this.count;
+    emitter.emit("AtmIsFree", this.coreContainer, this.client);
   }
 
   progressMove(
@@ -125,14 +131,6 @@ export default class Atm extends EventEmitter {
     parent.appendChild(elem);
     return elem;
   }
-
-  // update = function(props = {}) {
-  //   for (let key in props) {
-  //     if (props.hasOwnProperty(key)) {
-  //       elem[key] = props[key];
-  //     }
-  //   }
-  // };
 
   createElements() {
     let coreContainer = this.createElement("div", this.container, {
