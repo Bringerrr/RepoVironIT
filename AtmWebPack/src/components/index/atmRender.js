@@ -5,6 +5,7 @@ export default class AtmRender {
     this.writeSmth = this.writeSmth.bind(this);
     emitter.on("AtmIsBusy", this.writeSmth, function(container, client) {
       console.log("atmIsBusy", this);
+      console.log("atmIsBusy", this);
       container.style.backgroundColor = "red";
       client.style.backgroundColor = "black";
     });
