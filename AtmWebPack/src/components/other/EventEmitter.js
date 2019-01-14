@@ -1,6 +1,12 @@
 export default class EventEmitter {
   constructor() {
+    this.instance = null;
     this.events = {};
+
+    if (!this.instance) {
+      this.instance = this;
+    }
+    return this.instance;
   }
 
   emit(eventName, data) {

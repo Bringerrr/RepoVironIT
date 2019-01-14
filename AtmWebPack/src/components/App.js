@@ -9,9 +9,12 @@ const req = e => {
     if (index === 0) containers.push(elem);
     typeof elem === "object" && elem.length > 0 ? req(elem) : console.log(elem);
   });
-  console.log(containers);
 };
 
+let string = "OpusMagnumVoice";
+if (string.indexOf("sMagnumV") + 1) {
+  // console.log(string.replace("sMagnumV", "Как ай просто"));
+}
 // req(arr);
 
 // const queueContaier = document.getElementById("queue");
@@ -53,4 +56,4 @@ createTag(
   document.querySelector(".mainContainer")
 );
 
-require("./index/main.js");
+require("./main.js");
