@@ -1,13 +1,13 @@
-const events = require("events"),
-  EventEmitter = events.EventEmitter;
+const events = require('events')
 
-const emitter = function() {
-  if (arguments.callee._singletonInstance)
-    return arguments.callee._singletonInstance;
-  arguments.callee._singletonInstance = this;
-  EventEmitter.call(this);
-};
+const EventEmitter = events.EventEmitter
 
-emitter.prototype.__proto__ = EventEmitter.prototype;
+const emitter = function () {
+  if (arguments.callee._singletonInstance) { return arguments.callee._singletonInstance }
+  arguments.callee._singletonInstance = this
+  EventEmitter.call(this)
+}
 
-module.exports = new emitter();
+emitter.prototype.__proto__ = EventEmitter.prototype
+
+module.exports = new emitter()

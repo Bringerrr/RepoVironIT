@@ -5,9 +5,4 @@
   margin: 5px;
   border-radius: 6px;
   border: 1px solid black;
-  transition: all 0.3s;
-}
-
-.delete_button:hover {
-  transform: scale(1.2);
 }
