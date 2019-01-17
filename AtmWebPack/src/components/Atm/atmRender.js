@@ -9,7 +9,6 @@ export default class AtmRender extends Component {
     this.template;
     this.oldTemplate = {};
     emitter.on("RENDER_COMPONENT_ATM", function(data) {
-      // console.log("old template AtmRender", self.oldTemplate);
       self.render(
         data.state,
         self.createNewTemplate(data.variables),
@@ -28,6 +27,6 @@ export default class AtmRender extends Component {
       variables.count
     }" name="atmCounter" class="atmCounter"><div class="clientAtAtm" style="background-color: ${
       variables.servicing === true ? "black" : "transparent"
-    };"></div> ${createNewTemplate(variables.id)}</div>`;
+    };"></div>${createNewTemplate(variables.id)}</div>`;
   }
 }

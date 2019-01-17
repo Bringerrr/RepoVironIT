@@ -48,13 +48,11 @@ export default class Atm {
   init() {
     emitter.emit("RENDER_COMPONENT_ATM", this.getDataForRendering(false));
     emitter.emit("AtmIsFree", `${this.id}`);
+
     console.log(`this.id`, this.id);
     this.ownContainer = document.getElementById(`${this.id}`);
-    // this.deleteButton = new AtmButton(
-    //   this.ownContainer,
-    //   "Button",
-    //   this.delete()
-    // );
+    this.deleteButton = new AtmButton(this.ownContainer);
+    console.log(this.deleteButton);
   }
 
   update() {

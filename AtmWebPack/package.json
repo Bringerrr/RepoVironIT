@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode=development",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
-    "server": "webpack-dev-server --watch --mode=development"
+    "server": "webpack-dev-server --watch --mode=development --open"
   },
   "repository": "https://github.com/superjose/webpack-simple-example.git",
   "author": "Jose Asilis <superjose_49@hotmail.com>",
