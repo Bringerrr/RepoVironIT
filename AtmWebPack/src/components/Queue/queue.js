@@ -1,16 +1,18 @@
 import emitter from '../other/EventEmitterSingleton.js'
+import QueueRender from './queueRender.js'
 
 export default class Queue {
-  constructor (container, size, id) {
+  constructor(container, size, id) {
     let self = this
     this.id = id
-    this.container = container
     this.amount = size
     this.container = container // Контейнер для очереди
     this.clients = []
     this.listeners = [] // здесь список функций, которые надо вызвать
 
-    emitter.on('AtmIsFree', function (atm) {
+    this.render = null
+
+    emitter.on('AtmIsFree', function(atm) {
       console.log('AtmIsFree')
       if (self.amount > 0) {
         self.move()
@@ -20,7 +22,7 @@ export default class Queue {
   }
 
   // Первоначальный рендеринг
-  render () {
+  render() {
     for (let i = 0; i < this.amount; i++) {
       let client = document.createElement('div')
       this.clients.push(client)
@@ -30,7 +32,7 @@ export default class Queue {
     })
   }
 
-  getDataForRendering (state) {
+  getDataForRendering(state) {
     return {
       state: state,
       selector: this.container,
@@ -39,20 +41,21 @@ export default class Queue {
     }
   }
 
-  init () {
+  init() {
+    this.render = new QueueRender(this.id)
     emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(false))
   }
 
-  update () {
+  update() {
     emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(true))
   }
 
-  delete () {
+  delete() {
     emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(null))
   }
 
   // Движение очереди
-  move () {
+  move() {
     this.amount -= 1
     this.update()
   }

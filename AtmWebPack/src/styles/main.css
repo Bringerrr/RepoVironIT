@@ -59,23 +59,12 @@
   min-height: 600px;
 }
 
-.queue > div {
+.queue > .queueContainer {
   width: 100%;
+}
+
+.queue > #queueContainer > div {
   height: 60px;
   margin-bottom: 20px;
   background-color: black;
-}
-
-.mainContainer > .atmContainer > .atm > .myProgress {
-  width: 100%;
-  background-color: #ddd;
-}
-
-.mainContainer > .atmContainer > .atm > .myProgress > .myBar {
-  width: 100%;
-  height: 30px;
-  background-color: #4caf50;
-  text-align: center;
-  line-height: 30px;
-  color: black;
 }

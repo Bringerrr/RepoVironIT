@@ -1,16 +1,18 @@
 import emitter from '../other/EventEmitterSingleton.js'
-
 import AtmButton from '../AtmButton/atmButton.js'
+import AtmRender from './atmRender.js'
 
 export default class Atm {
-  constructor (container, servicingTime, timeGap, id, className) {
+  constructor(parentContainer, servicingTime, timeGap, id, className) {
     let self = this
     this.status = 'working'
     this.servicingTime = servicingTime
     this.id = id
     this.count = 0 // Всего обслужено клиентов
-    this.container = container // родительский
+    this.parentContainer = parentContainer // родительский
     this.ownContainer = null // собственный
+    this.display = null
+    this.mainContainer = document.getElementById('mainContainer')
     this.id = id // Наименование айдишника
     this.className = className // Наименование класса
     this.servicing = false // Обслуживание клиента
@@ -20,15 +22,21 @@ export default class Atm {
 
     this.atmCounter = 0
     this.deleteButton = null
-    this.emmiter = emitter.on('clientEntered', function (x) {
-      if (self.id === x && self.status === 'working') { self.servicingClientStart() }
+    this.render = null
+    this.emmiter = emitter.on('clientEntered', function(x) {
+      if (self.id === x && self.status === 'working') {
+        self.servicingClientStart()
+      }
+    })
+    emitter.on(`ATM_DELETE_${this.id}`, function() {
+      self.delete()
     })
   }
 
-  getDataForRendering (state) {
+  getDataForRendering(state) {
     return {
       state: state,
-      selector: this.container,
+      selector: this.parentContainer,
       variables: {
         servicing: this.servicing,
         servicingTime: this.servicingTime,
@@ -38,30 +46,36 @@ export default class Atm {
     }
   }
 
-  init () {
-    emitter.emit('RENDER_COMPONENT_ATM', this.getDataForRendering(false))
+  cb() {
+    return 'callBek'
+  }
+
+  init() {
+    this.render = new AtmRender(this.id)
+    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering(false))
     emitter.emit('AtmIsFree', `${this.id}`)
 
     this.ownContainer = document.getElementById(`${this.id}`)
-    this.deleteButton = new AtmButton(this.ownContainer)
+    this.display = this.ownContainer.querySelector('.display')
+    this.deleteButton = new AtmButton(this.ownContainer, `ATM_DELETE_${this.id}`).init()
   }
 
-  update () {
-    emitter.emit('RENDER_COMPONENT_ATM', this.getDataForRendering(true))
+  update() {
+    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering(true))
   }
 
-  delete () {
+  delete() {
     this.status = 'offline' // обрубаем связь
-    emitter.emit('RENDER_COMPONENT_ATM', this.getDataForRendering(null))
+    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering(null))
   }
 
-  servicingClientStart () {
+  servicingClientStart() {
     this.servicing = true
     this.update()
     this.servicingClient()
   }
 
-  servicingClient () {
+  servicingClient() {
     setTimeout(() => {
       this.servicing = false
       this.count += 1
@@ -72,7 +86,7 @@ export default class Atm {
     }, this.servicingTime + this.timeGap)
   }
 
-  servicingClientEnd () {
+  servicingClientEnd() {
     this.servicing = false
     this.update()
     emitter.emit('AtmIsFree', `${this.id}`)

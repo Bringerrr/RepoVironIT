@@ -1,33 +1,36 @@
 import emitter from '../other/EventEmitterSingleton.js'
 import Component from '../other/Component'
-import { createNewTemplate } from '../AtmButton/atmButtonRender.js'
+// import atmButtonRender from '../AtmButton/atmButtonRender.js'
 
 export default class AtmRender extends Component {
-  constructor () {
+  constructor(id) {
     super()
     let self = this
+    this.id = id
     this.template
     this.oldTemplate = {}
     this.variables
-    emitter.on('RENDER_COMPONENT_ATM', function (data) {
+
+    emitter.on(`RENDER_COMPONENT_ATM_${this.id}`, function(data) {
+      // console.log('createNewTemplate', self.createNewTemplate(data.variables))
       self.render(
         data.state,
         self.createNewTemplate(data.variables),
-        self.oldTemplate[data.variables.id],
+        self.oldTemplate,
         data.selector,
-        data.variables.id
+        id
       )
     })
   }
 
-  createNewTemplate (variables) {
+  createNewTemplate(variables) {
     return `<div id="${variables.id}" class="atm" style="background-color: ${
       variables.servicing === true ? 'red' : 'green'
     };"><h4>Время на обслуживание : </h4><span>${variables.servicingTime /
-      1000} секунды</span><label for="atmCounter">Обслужено :  </label><input type="text" value="${
+      1000} секунды</span><label for="atmCounter">Обслужено :  </label><p class="atmCounter">${
       variables.count
-    }" name="atmCounter" class="atmCounter"><div class="clientAtAtm" style="background-color: ${
+    }"</p><div class="clientAtAtm" style="background-color: ${
       variables.servicing === true ? 'black' : 'transparent'
-    };"></div>${createNewTemplate(variables.id)}</div>`
+    };"></div></div>`
   }
 }

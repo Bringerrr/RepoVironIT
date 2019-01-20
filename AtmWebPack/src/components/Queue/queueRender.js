@@ -2,31 +2,31 @@ import emitter from '../other/EventEmitterSingleton.js'
 import Component from '../other/Component'
 
 export default class QueueRender extends Component {
-  constructor () {
+  constructor(id) {
     super()
     let self = this
+    this.id = id
     this.oldTemplate = {}
-    emitter.on('RENDER_COMPONENT_QUEUE', function (data) {
+    emitter.on('RENDER_COMPONENT_QUEUE', function(data) {
       self.render(
         data.state,
         self.createNewTemplate(data.variables, data.count),
-        self.oldTemplate[data.variables.id],
+        self.oldTemplate,
         data.selector,
-        data.variables.id
+        `queueContainer`
       )
     })
   }
 
-  createNewTemplate (variables, count = 0) {
-    let template = `<div></div>`
+  createNewTemplate(variables, count = 0) {
+    // let template = `<div id="client${count}"></div>`
     let groupOfElements = []
-    console.log(count)
     if (count === 0) {
       return ''
     }
     for (let i = 0; i < count; i++) {
-      groupOfElements.push(template)
+      groupOfElements.push(`<div id="client${i}"></div>`)
     }
-    return groupOfElements.join('')
+    return `<div id="queueContainer">${groupOfElements.join('')}</div>`
   }
 }
