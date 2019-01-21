@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode=development",
     "dev": "WEBPACK_ENV=dev webpack --progress --colors --watch",
-    "server": "webpack-dev-server --watch --mode=development --open",
+    "server": "webpack-dev-server --watch --mode=development",
     "lint": "eslint src/",
     "lint:fix": "eslint src --fix"
   },
@@ -20,6 +20,11 @@
     "webpack": "^4.17.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.2.3",
+    "axios": "^0.18.0",
+    "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
     "eslint": "^5.12.0",
     "eslint-config-prettier": "^3.5.0",

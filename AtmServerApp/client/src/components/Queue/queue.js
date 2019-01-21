@@ -7,9 +7,8 @@ export default class Queue {
     this.id = id
     this.amount = size
     this.container = container // Контейнер для очереди
-    this.clients = []
-    this.listeners = [] // здесь список функций, которые надо вызвать
 
+    this.flow = null
     this.render = null
 
     emitter.on('AtmIsFree', function(atm) {
@@ -41,7 +40,12 @@ export default class Queue {
   }
 
   init() {
-    this.render = new QueueRender(this.id)
+    this.render = new QueueRender(this.container.id)
+    console.log(this.container.id)
+    this.flow = setInterval(() => {
+      this.amount += 1
+      this.update()
+    }, 1000)
     emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(false))
   }
 

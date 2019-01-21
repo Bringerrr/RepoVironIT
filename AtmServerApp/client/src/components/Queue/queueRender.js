@@ -6,6 +6,7 @@ export default class QueueRender extends Component {
     super()
     let self = this
     this.id = id
+    this.containerId = `queueContainer`
     this.oldTemplate = {}
     emitter.on('RENDER_COMPONENT_QUEUE', function(data) {
       self.render(
@@ -13,7 +14,7 @@ export default class QueueRender extends Component {
         self.createNewTemplate(data.variables, data.count),
         self.oldTemplate,
         data.selector,
-        `queueContainer`
+        self.containerId
       )
     })
   }
@@ -26,6 +27,6 @@ export default class QueueRender extends Component {
     for (let i = 0; i < count; i++) {
       groupOfElements.push(`<div id="client${i}"></div>`)
     }
-    return `<div id="queueContainer">${groupOfElements.join('')}</div>`
+    return `<div id="${this.containerId}">${groupOfElements.join('')}</div>`
   }
 }

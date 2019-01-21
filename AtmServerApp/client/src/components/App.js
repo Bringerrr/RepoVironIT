@@ -1,6 +1,9 @@
 import '../styles/main.css'
+import axios from 'axios' // promised based requests - like fetch()
 
-console.log(parseInt('wer'))
+console.log(window.location.hostname)
+
+axios.get(`/api/atm`).then(res => console.log(res.data))
 
 function createTag(tagName, id, className, inner, parent) {
   let elem = document.createElement(tagName)

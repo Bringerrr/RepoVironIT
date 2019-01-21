@@ -1,13 +1,11 @@
-const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const path = require("path");
-
 const atms = require("./routes/api/atm");
-// const profile = require('./routes/api/profile');
-// const posts = require('./routes/api/posts');
-
+const cors = require("cors");
+const express = require("express");
 const app = express();
+
+app.use(cors());
 
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,10 +24,7 @@ mongoose
   .catch(err => console.log(err));
 
 // Use Routes
-
 app.use("/api/atm", atms);
-// app.use("/api/profile", profile);
-// app.use("/api/posts", posts);
 
 const port = process.env.PORT || 5000;
 
