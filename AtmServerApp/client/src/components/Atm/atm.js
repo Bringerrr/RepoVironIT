@@ -3,12 +3,12 @@ import AtmButton from '../AtmButton/atmButton.js'
 import AtmRender from './atmRender.js'
 
 export default class Atm {
-  constructor(parentContainer, servicingTime, timeGap, id, className) {
+  constructor(parentContainer, servicingTime, timeGap, id, className, count) {
     let self = this
     this.status = 'working'
     this.servicingTime = servicingTime
     this.id = id
-    this.count = 0 // Всего обслужено клиентов
+    this.count = count || 0 // Всего обслужено клиентов
     this.parentContainer = parentContainer // родительский
     this.ownContainer = null // собственный
     this.display = null
