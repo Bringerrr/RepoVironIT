@@ -19,17 +19,6 @@ export default class Queue {
     })
   }
 
-  // Первоначальный рендеринг
-  render() {
-    for (let i = 0; i < this.amount; i++) {
-      let client = document.createElement('div')
-      this.clients.push(client)
-    }
-    this.clients.forEach(client => {
-      this.container.appendChild(client)
-    })
-  }
-
   getDataForRendering(state) {
     return {
       state: state,
@@ -41,20 +30,20 @@ export default class Queue {
 
   init() {
     this.render = new QueueRender(this.container.id)
-    console.log(this.container.id)
     this.flow = setInterval(() => {
       this.amount += 1
       this.update()
     }, 1000)
-    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(false))
+
+    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering('firstTimeRender'))
   }
 
   update() {
-    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(true))
+    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering('update'))
   }
 
   delete() {
-    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering(null))
+    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering('delete'))
   }
 
   // Движение очереди

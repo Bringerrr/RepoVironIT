@@ -5,12 +5,12 @@ export default class Component {
     this.render = function(state, newTemplate, oldTemplate, selector, id, event) {
       let newTempDom = this.createElementFromHTML(newTemplate)
 
-      if (state === false) {
+      if (state === 'firstTimeRender') {
         // First time render element
         selector.appendChild(newTempDom)
       }
 
-      if (state === true) {
+      if (state === 'update') {
         // Update
         if (selector.innerHTML.indexOf(oldTemplate) + 1) {
           if (newTempDom === null) {
@@ -21,7 +21,7 @@ export default class Component {
         }
       }
 
-      if (state === null) {
+      if (state === 'delete') {
         // Delete
         if (selector.innerHTML.indexOf(oldTemplate) + 1) {
           selector.removeChild(selector.querySelector(`#${id}`))

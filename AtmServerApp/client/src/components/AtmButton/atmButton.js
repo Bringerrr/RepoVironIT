@@ -13,7 +13,10 @@ export default class AtmButton {
   init() {
     this.render = new AtmButtonRender(this.id)
 
-    emitter.emit(`RENDER_COMPONENT_ATM_BUTTON_${this.id}`, this.getDataForRendering(false))
+    emitter.emit(
+      `RENDER_COMPONENT_ATM_BUTTON_${this.id}`,
+      this.getDataForRendering('firstTimeRender')
+    )
   }
 
   getDataForRendering(state) {

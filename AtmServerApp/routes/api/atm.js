@@ -4,6 +4,8 @@ const router = express.Router();
 // Atm model
 const atm = require("../../models/atm");
 
+// @route   GET api
+// @desc    Get all Atms
 router.get("/", (req, res) => {
   atm
     .find()
@@ -12,6 +14,8 @@ router.get("/", (req, res) => {
     .catch(err => res.status(404).json({ noatmsfound: "No atms found" }));
 });
 
+// @route   POST api/atm
+// @desc    Create Atm
 router.post("/", (req, res) => {
   Atm.findOne({ id: req.body.id }).then(atm => {
     if (atm) res.json("Atm c с таким id уже есть");
@@ -20,7 +24,7 @@ router.post("/", (req, res) => {
         id: req.body.id,
         servicingTime: req.body.servicingTime,
         timeGap: req.body.timeGap,
-        count: req.body.count
+        count: 0
       });
       console.log(newAtm.id);
       newAtm.save().then(atm => res.json(atm));
@@ -28,21 +32,24 @@ router.post("/", (req, res) => {
   });
 });
 
-router.get("/test", (req, res) => {
-  console.log(req.body.length);
-  // Atm.findOne({ id: req.body.id }).then(atm => {
-  //   if (atm) res.json("Atm c с таким id уже есть");
-  //   else res.json("Atm c с таким id нету");
-  // });
-});
-
-// @route   DELETE api/users/:id
-// @desc    Delete A User
-// @access  Public
+// @route   DELETE api/atm/:id
+// @desc    Delete atm
 router.delete("/:id", (req, res) => {
   Atm.findOne({ id: req.params.id })
     .then(atm => atm.remove().then(() => res.json({ success: true })))
     .catch(err => res.status(404).json({ success: false }));
+});
+
+// @route   POST api/atm/change/:id/:increment
+// @desc    Increase atm
+router.post("/change/:id/:increment", (req, res) => {
+  Atm.findOne({ id: req.params.id })
+    .then(atm => {
+      atm.count += parseInt(req.params.increment);
+      console.log(atm);
+      atm.save().then(post => res.status(200).json(post));
+    })
+    .catch(err => res.status(404).json({ atmnotfound: "No atm found" }));
 });
 
 // @route   DELETE api/posts/:id
@@ -58,35 +65,6 @@ router.delete("/:id", (req, res) => {
 //     .catch(err => res.status(404).json({ postnotfound: "No atm found" }));
 // });
 // });
-
-// // @route   POST api/posts/like/:id
-// // @desc    Like post
-// // @access  Private
-// router.post(
-//   "/like/:id",
-//   passport.authenticate("jwt", { session: false }),
-//   (req, res) => {
-//     Profile.findOne({ user: req.user.id }).then(profile => {
-//       Post.findById(req.params.id)
-//         .then(post => {
-//           if (
-//             post.likes.filter(like => like.user.toString() === req.user.id)
-//               .length > 0
-//           ) {
-//             return res
-//               .status(400)
-//               .json({ alreadyliked: "User already liked this post" });
-//           }
-
-//           // Add user id to likes array
-//           post.likes.unshift({ user: req.user.id });
-
-//           post.save().then(post => res.json(post));
-//         })
-//         .catch(err => res.status(404).json({ postnotfound: "No post found" }));
-//     });
-//   }
-// );
 
 // // @route   POST api/posts/unlike/:id
 // // @desc    Unlike post

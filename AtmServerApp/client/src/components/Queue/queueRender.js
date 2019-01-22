@@ -22,7 +22,7 @@ export default class QueueRender extends Component {
   createNewTemplate(variables, count = 0) {
     let groupOfElements = []
     if (count === 0) {
-      return ''
+      return `<div id="${this.containerId}"></div>`
     }
     for (let i = 0; i < count; i++) {
       groupOfElements.push(`<div id="client${i}"></div>`)

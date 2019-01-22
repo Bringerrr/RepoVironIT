@@ -5,13 +5,14 @@ import AtmRender from './atmRender.js'
 export default class Atm {
   constructor(parentContainer, servicingTime, timeGap, id, className, count) {
     let self = this
+
     this.status = 'working'
+
     this.servicingTime = servicingTime
     this.id = id
     this.count = count || 0 // Всего обслужено клиентов
     this.parentContainer = parentContainer // родительский
     this.ownContainer = null // собственный
-    this.display = null
     this.mainContainer = document.getElementById('mainContainer')
     this.id = id // Наименование айдишника
     this.className = className // Наименование класса
@@ -46,22 +47,32 @@ export default class Atm {
     }
   }
 
+  // Если АТМ не обслуживает клиента, то
+  // он повторно сигнизирует о том, что свооден
+  atmIsFree() {
+    emitter.emit('AtmIsFree', `${this.id}`)
+    if (this.servicing === false) {
+      setTimeout(() => {
+        this.atmIsFree()
+      }, 1000)
+    }
+  }
+
   init() {
     this.render = new AtmRender(this.id)
-    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering(false))
-    emitter.emit('AtmIsFree', `${this.id}`)
-
+    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('firstTimeRender'))
+    this.atmIsFree()
     this.ownContainer = document.getElementById(`${this.id}`)
     this.deleteButton = new AtmButton(this.parentContainer, `ATM_DELETE_${this.id}`).init()
   }
 
   update() {
-    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering(true))
+    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('update'))
   }
 
   delete() {
     this.status = 'offline' // обрубаем связь
-    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering(null))
+    emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('delete'))
   }
 
   servicingClientStart() {
@@ -85,7 +96,7 @@ export default class Atm {
     this.servicing = false
     this.update()
     if (this.status === 'working') {
-      emitter.emit('AtmIsFree', `${this.id}`)
+      this.atmIsFree()
     }
   }
 }
