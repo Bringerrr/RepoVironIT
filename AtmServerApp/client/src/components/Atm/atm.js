@@ -49,11 +49,11 @@ export default class Atm {
 
   // Если АТМ не обслуживает клиента, то
   // он повторно сигнизирует о том, что свооден
-  atmIsFree() {
+  atmNotifyItIsFree() {
     emitter.emit('AtmIsFree', `${this.id}`)
-    if (this.servicing === false) {
+    if (this.servicing === false && this.status === 'working') {
       setTimeout(() => {
-        this.atmIsFree()
+        this.atmNotifyItIsFree()
       }, 1000)
     }
   }
@@ -61,7 +61,7 @@ export default class Atm {
   init() {
     this.render = new AtmRender(this.id)
     emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('firstTimeRender'))
-    this.atmIsFree()
+    this.atmNotifyItIsFree()
     this.ownContainer = document.getElementById(`${this.id}`)
     this.deleteButton = new AtmButton(this.parentContainer, `ATM_DELETE_${this.id}`).init()
   }
@@ -76,6 +76,7 @@ export default class Atm {
   }
 
   servicingClientStart() {
+    console.log(this.id, ` is servising client`)
     this.servicing = true
     this.update()
     this.servicingClient()
@@ -96,7 +97,7 @@ export default class Atm {
     this.servicing = false
     this.update()
     if (this.status === 'working') {
-      this.atmIsFree()
+      this.atmNotifyItIsFree()
     }
   }
 }

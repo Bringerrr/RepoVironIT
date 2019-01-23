@@ -1,9 +1,7 @@
-import isNumber from './isNumber'
-import isEmpty from './isEmpty'
-
 import axios from 'axios'
 
-// import createAtmFunction from './createAtmFunction'
+import isNumber from './isNumber'
+import isEmpty from './isEmpty'
 
 import Atm from '../Atm/atm.js'
 
@@ -147,6 +145,7 @@ props.forEach(element => {
     Atm
   )
 })
+
 
 DOMtemplate.querySelector('#form_button-create').addEventListener('click', validation, false)
 

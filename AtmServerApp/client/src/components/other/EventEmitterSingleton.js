@@ -10,6 +10,17 @@ const Emitter = function(...args) {
   EventEmitter.call(this)
 }
 
-Emitter.prototype.__proto__ = EventEmitter.prototype
+function inherit(childClass, parentClass) {
+  var F = function() {} // defining temp empty function
+  F.prototype = parentClass.prototype
+  F.prototype.constructor = F
+
+  childClass.prototype = new F()
+
+  childClass.prototype.constructor = childClass // restoring proper constructor for child class
+  parentClass.prototype.constructor = parentClass // restoring proper constructor for parent class
+}
+
+inherit(Emitter, EventEmitter)
 
 module.exports = new Emitter()
