@@ -11,25 +11,27 @@ router.get("/", (req, res) => {
     .find()
     .sort({ date: -1 })
     .then(atm => res.json(atm))
-    .catch(err => res.status(404).json({ noatmsfound: "No atms found" }));
+    .catch(err => res.status(404).json({ error: "No atms found" }));
 });
 
 // @route   POST api/atm
 // @desc    Create Atm
 router.post("/", (req, res) => {
-  Atm.findOne({ id: req.body.id }).then(atm => {
-    if (atm) res.json("Atm c с таким id уже есть");
-    else {
-      const newAtm = new Atm({
-        id: req.body.id,
-        servicingTime: req.body.servicingTime,
-        timeGap: req.body.timeGap,
-        count: 0
-      });
-      console.log(newAtm.id);
-      newAtm.save().then(atm => res.json(atm));
-    }
-  });
+  Atm.findOne({ id: req.body.id })
+    .then(atm => {
+      if (atm) res.json.status(418)({ error: "This ID is already there" });
+      else {
+        const newAtm = new Atm({
+          id: req.body.id,
+          servicingTime: req.body.servicingTime,
+          timeGap: req.body.timeGap,
+          count: 0
+        });
+        console.log(newAtm.id);
+        newAtm.save().then(atm => res.json(atm));
+      }
+    })
+    .catch(err => res.json({ atm: "I am a teapot" }));
 });
 
 // @route   DELETE api/atm/:id
@@ -41,7 +43,7 @@ router.delete("/:id", (req, res) => {
 });
 
 // @route   POST api/atm/change/:id/:increment
-// @desc    Increase atm
+// @desc    Increase atm's count
 router.post("/change/:id/:increment", (req, res) => {
   Atm.findOne({ id: req.params.id })
     .then(atm => {
