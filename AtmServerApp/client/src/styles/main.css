@@ -1,3 +1,12 @@
+@keyframes example {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -20,6 +29,7 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
   background-color: grey;
+  min-height: 300px;
 }
 
 .mainContainer > .atmContainer {
@@ -28,6 +38,16 @@
   flex-wrap: wrap;
   background-color: grey;
   min-height: 200px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.mainContainer > .atmContainer > .spinner {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  animation: example 1.3s ease-out infinite;
+  background-image: url('../img/spinner.png');
 }
 
 .mainContainer > .atmContainer > .atm {

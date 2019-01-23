@@ -1,5 +1,5 @@
 import '../styles/main.css'
-import axios from 'axios' 
+import axios from 'axios'
 
 console.log(window.location.hostname)
 
@@ -20,6 +20,7 @@ function createTag(tagName, id, className, inner, parent) {
 createTag('div', 'formContainer', 'formContainer', '', document.body)
 createTag('div', 'mainContainer', 'mainContainer', '', document.body)
 createTag('div', 'atmContainer', 'atmContainer', '', document.querySelector('.mainContainer'))
+createTag('div', 'spinner', 'spinner', '', document.querySelector('.atmContainer'))
 createTag('div', 'queue', 'queue', '', document.querySelector('.mainContainer'))
 
 require('./main.js')

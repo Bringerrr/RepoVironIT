@@ -25,7 +25,9 @@ export default class AtmRender extends Component {
   createNewTemplate(variables) {
     return `<div class="atm" id="${variables.id}" style="background-color: ${
       variables.servicing === true ? 'red' : 'green'
-    };"><h4>Время на обслуживание : </h4><span>${variables.servicingTime /
+    };"><h4 class="atm-name">${
+      this.id
+    }</h4><h4>Время на обслуживание : </h4><span>${variables.servicingTime /
       1000} секунды</span><label for="atmCounter">Обслужено :  </label><p class="atmCounter">${
       variables.count
     }</p><div class="clientAtAtm" style="background-color: ${

@@ -46,7 +46,6 @@ router.post("/change/:id/:increment", (req, res) => {
   Atm.findOne({ id: req.params.id })
     .then(atm => {
       atm.count += parseInt(req.params.increment);
-      console.log(atm);
       atm.save().then(post => res.status(200).json(post));
     })
     .catch(err => res.status(404).json({ atmnotfound: "No atm found" }));

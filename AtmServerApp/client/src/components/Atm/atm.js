@@ -2,6 +2,8 @@ import emitter from '../other/EventEmitterSingleton.js'
 import AtmButton from '../AtmButton/atmButton.js'
 import AtmRender from './atmRender.js'
 
+import axios from 'axios'
+
 export default class Atm {
   constructor(parentContainer, servicingTime, timeGap, id, className, count) {
     let self = this
@@ -18,7 +20,7 @@ export default class Atm {
     this.className = className // Наименование класса
     this.servicing = false // Обслуживание клиента
     this.servicingTime = parseInt(servicingTime) // Время на обслуживание в миллисекундах
-    this.timeGap = timeGap // Промежуток между тем как банкомат закончил обслуживание
+    this.timeGap = parseInt(timeGap) // Промежуток между тем как банкомат закончил обслуживание
     // клиента и приступил к обслуживание другого
 
     this.atmCounter = 0
@@ -61,7 +63,9 @@ export default class Atm {
   init() {
     this.render = new AtmRender(this.id)
     emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('firstTimeRender'))
+
     this.atmNotifyItIsFree()
+
     this.ownContainer = document.getElementById(`${this.id}`)
     this.deleteButton = new AtmButton(this.parentContainer, `ATM_DELETE_${this.id}`).init()
   }
@@ -72,20 +76,40 @@ export default class Atm {
 
   delete() {
     this.status = 'offline' // обрубаем связь
+    this.fetchDelete()
     emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('delete'))
   }
 
   servicingClientStart() {
-    console.log(this.id, ` is servising client`)
     this.servicing = true
     this.update()
     this.servicingClient()
+  }
+
+  async fetchDelete() {
+    await axios
+      .delete(`http://localhost:5000/api/atm/${this.id}`)
+      .then(res => console.log(res.data))
+      .catch(err => err)
+  }
+
+  async fetchIncreaseCounter() {
+    await axios
+      .post(`http://localhost:5000/api/atm/change/${this.id}/${1}`, {
+        id: 'atmTest2',
+        servicingTime: 2000,
+        timeGap: 4000,
+        count: 200
+      })
+      .then(res => res)
+      .catch(err => err)
   }
 
   servicingClient() {
     setTimeout(() => {
       this.servicing = false
       this.count += 1
+      this.fetchIncreaseCounter()
       this.update()
     }, this.servicingTime)
     setTimeout(() => {
