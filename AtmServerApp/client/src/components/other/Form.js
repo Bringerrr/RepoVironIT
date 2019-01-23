@@ -67,8 +67,6 @@ const createElementFromHTML = function(htmlString) {
   return div.firstChild
 }
 
-let DOMtemplate = createElementFromHTML(template)
-
 const createInitializedAtm = function(
   container,
   servisingTime,
@@ -163,6 +161,8 @@ const validation = function(e) {
     return false
   }
 }
+
+let DOMtemplate = createElementFromHTML(template)
 
 getProps() // Запрашиваем АТМ-ы
 
