@@ -5,8 +5,6 @@ import isEmpty from './isEmpty'
 
 import Atm from '../Atm/atm.js'
 
-console.log(document.getElementById('spinner'))
-
 const mainContainer = document.getElementById('atmContainer')
 
 // общие классы для всех банкоматов
@@ -16,14 +14,14 @@ const classNames = {
   clientAtAtm: 'clientAtAtm'
 }
 
+// Пропсы на случай ошибки фетч запроса
 let defProps = [
   { id: 'atmNew1', servisingTime: 1320, timeGap: 2000 },
   { id: 'atmNew2', servisingTime: 1920, timeGap: 2000 },
   { id: 'atmNew3', servisingTime: 2900, timeGap: 2000 }
 ]
 
-let props = []
-let objts1 = []
+let props = [] // props для хранения атрибутов ATM объекта
 
 const hideSpiner = () => {
   const Spinner = document.getElementById('spinner')
@@ -36,36 +34,28 @@ const getProps = async () => {
     .then(res => (props = res.data))
     .then(res => hideSpiner())
     .catch(err => {
-      console.log
       props = defProps
       return err
     })
-  console.log('props', props)
+
   props.forEach(element => {
-    console.log(element.servicingTime)
-    objts1.push(
-      createInitializedAtm(
-        mainContainer,
-        element.servicingTime,
-        parseInt(element.timeGap),
-        element.id,
-        classNames,
-        element.count,
-        Atm
-      )
+    createInitializedAtm(
+      mainContainer,
+      element.servicingTime,
+      parseInt(element.timeGap),
+      element.id,
+      classNames,
+      element.count,
+      Atm
     )
   })
-  console.log(objts1)
 }
 
 const createAtm = async body => {
   await axios
     .post(`http://localhost:5000/api/atm`, body)
-    .then(res => console.log(res))
-    .catch(err => {
-      console.log
-      return err
-    })
+    .then(res => res)
+    .catch(err => err)
 }
 
 createAtm({
@@ -75,19 +65,7 @@ createAtm({
   count: 200
 })
 
-const postProps = async () => {
-  await axios
-    .post(`http://localhost:5000/api/atm`, {
-      id: 'atmTest2',
-      servicingTime: 2000,
-      timeGap: 4000,
-      count: 200
-    })
-    .then(res => console.log(res.data))
-}
-
 getProps()
-postProps()
 
 const template =
   '<form id="formContainer"><input id="servisingTime" placeholder="Время oбслуживание (мс)"><span></span></br></input><input id="timeGap" placeholder="Время задержки (мс)"><span></span></br></input><input id="atmID" placeholder="ID"></input><span></span></br><button id="form_button-create" class="button-create" value="Добавить">Добавить</button></form>'
