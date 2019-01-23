@@ -6,6 +6,8 @@ import isEmpty from './isEmpty'
 import Atm from '../Atm/atm.js'
 
 const mainContainer = document.getElementById('atmContainer')
+const template =
+  '<form id="formContainer"><input id="servisingTime" placeholder="Время oбслуживание (мс)"><span></span></br></input><input id="timeGap" placeholder="Время задержки (мс)"><span></span></br></input><input id="atmID" placeholder="ID"></input><span></span></br><button id="form_button-create" class="button-create" value="Добавить">Добавить</button></form>'
 
 // общие классы для всех банкоматов
 const classNames = {
@@ -15,13 +17,13 @@ const classNames = {
 }
 
 // Пропсы на случай ошибки фетч запроса
-let defProps = [
+const defProps = [
   { id: 'atmNew1', servisingTime: 1320, timeGap: 2000 },
   { id: 'atmNew2', servisingTime: 1920, timeGap: 2000 },
   { id: 'atmNew3', servisingTime: 2900, timeGap: 2000 }
 ]
 
-let props = [] // props для хранения атрибутов ATM объекта
+let props = [] // props для хранения текущих атрибутов ATM объектов
 
 const hideSpiner = () => {
   const Spinner = document.getElementById('spinner')
@@ -57,18 +59,6 @@ const createAtm = async body => {
     .then(res => res)
     .catch(err => err)
 }
-
-createAtm({
-  id: 'atmTest',
-  servicingTime: 2000,
-  timeGap: 4000,
-  count: 200
-})
-
-getProps()
-
-const template =
-  '<form id="formContainer"><input id="servisingTime" placeholder="Время oбслуживание (мс)"><span></span></br></input><input id="timeGap" placeholder="Время задержки (мс)"><span></span></br></input><input id="atmID" placeholder="ID"></input><span></span></br><button id="form_button-create" class="button-create" value="Добавить">Добавить</button></form>'
 
 const createElementFromHTML = function(htmlString) {
   if (htmlString === '') console.log(htmlString)
@@ -173,6 +163,8 @@ const validation = function(e) {
     return false
   }
 }
+
+getProps() // Запрашиваем АТМ-ы
 
 DOMtemplate.querySelector('#form_button-create').addEventListener('click', validation, false)
 
