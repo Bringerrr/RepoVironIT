@@ -1,6 +1,7 @@
 import emitter from '../other/EventEmitterSingleton.js'
 import AtmButton from '../AtmButton/atmButton.js'
 import AtmRender from './atmRender.js'
+import AtmPopup from '../AtmPopup/AtmPopup.js'
 
 import axios from 'axios'
 
@@ -16,23 +17,38 @@ export default class Atm {
     this.parentContainer = parentContainer // родительский
     this.ownContainer = null // собственный
     this.mainContainer = document.getElementById('mainContainer')
+    this.popupContainer = document.getElementById('popupContainer')
+    this.popupIndicator = document.getElementById('popupIndicator')
+
     this.id = id // Наименование айдишника
     this.className = className // Наименование класса
     this.servicing = false // Обслуживание клиента
     this.servicingTime = parseInt(servicingTime) // Время на обслуживание в миллисекундах
     this.timeGap = parseInt(timeGap) // Промежуток между тем как банкомат закончил обслуживание
     // клиента и приступил к обслуживание другого
-
     this.atmCounter = 0
+
     this.deleteButton = null
     this.render = null
+    this.popup = null
+
     emitter.on('clientEntered', function(x) {
+      // queue
       if (self.id === x && self.status === 'working') {
         self.servicingClientStart()
       }
     })
     emitter.on(`ATM_DELETE_${this.id}`, function() {
+      // delete button event
       self.delete()
+    })
+    emitter.on(`ATM_POPUP_DELETE_${this.id}`, function() {
+      // delete button by popup event
+      self.delete()
+    })
+
+    emitter.on(`ATM_RENDER_POPUP_${this.id}`, function() {
+      self.showPopup(self.count)
     })
   }
 
@@ -45,6 +61,9 @@ export default class Atm {
         servicingTime: this.servicingTime,
         count: this.count,
         id: this.id
+      },
+      events: {
+        onclick: `ATM_RENDER_POPUP_${this.id}`
       }
     }
   }
@@ -60,6 +79,11 @@ export default class Atm {
     }
   }
 
+  showPopup(initCount) {
+    this.popup.init()
+    this.popup.show(initCount)
+  }
+
   init() {
     this.render = new AtmRender(this.id)
     emitter.emit(`RENDER_COMPONENT_ATM_${this.id}`, this.getDataForRendering('firstTimeRender'))
@@ -67,7 +91,12 @@ export default class Atm {
     this.atmNotifyItIsFree()
 
     this.ownContainer = document.getElementById(`${this.id}`)
-    this.deleteButton = new AtmButton(this.parentContainer, `ATM_DELETE_${this.id}`).init()
+    this.deleteButton = new AtmButton(
+      this.parentContainer,
+      `ATM_DELETE_${this.id}`,
+      `ATM_DELETE_${this.id}`
+    ).init()
+    this.popup = new AtmPopup(this.popupIndicator, `RENDER_COMPONENT_ATM_POPUP_${this.id}`, this.id)
   }
 
   update() {

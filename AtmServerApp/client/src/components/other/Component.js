@@ -6,12 +6,19 @@ export default class Component {
       let newTempDom = this.createElementFromHTML(newTemplate)
 
       if (state === 'firstTimeRender') {
+        if (newTemplate.indexOf('POPUP') + 1) {
+          console.log(selector)
+        }
         // First time render element
         selector.appendChild(newTempDom)
       }
 
       if (state === 'update') {
+        // if (newTemplate.indexOf('POPUP') + 1) {
+        //   console.log(selector)
+        // }
         // Update
+
         if (selector.innerHTML.indexOf(oldTemplate) + 1) {
           if (newTempDom === null) {
             selector.removeChild(selector.firstChild)
@@ -33,8 +40,11 @@ export default class Component {
       if (event) {
         // Add Event Listener
         document.getElementById(id).addEventListener('click', e => {
+          console.log(event.onclick)
           e.preventDefault()
-          e.currentTarget.style.display = 'none'
+          if (event.onclick.indexOf('DELETE') + 1) {
+            e.currentTarget.style.display = 'none'
+          }
           emitter.emit(event.onclick)
         })
       }

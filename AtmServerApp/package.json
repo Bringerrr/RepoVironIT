@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "client:install": "npm install --prefix client",
-    "server": "nodemon server.js",
     "client:dev": "npm run server --prefix client",
+    "server": "nodemon server.js",
     "dev": "concurrently \"npm run server\" \"npm run client:dev\""
   },
   "author": "Kruchkov Evg",

@@ -4,8 +4,12 @@ import isNumber from './isNumber'
 import isEmpty from './isEmpty'
 
 import Atm from '../Atm/atm.js'
+import AtmPopup from '../AtmPopup/AtmPopup.js'
 
 const mainContainer = document.getElementById('atmContainer')
+
+// const popup = new AtmPopup(mainContainer, 'Popup')
+
 const template =
   '<form id="formContainer"><input id="servisingTime" placeholder="Время oбслуживание (мс)"><span></span></br></input><input id="timeGap" placeholder="Время задержки (мс)"><span></span></br></input><input id="atmID" placeholder="ID"></input><span></span></br><button id="form_button-create" class="button-create" value="Добавить">Добавить</button></form>'
 
@@ -90,7 +94,7 @@ const validation = function(e) {
 
   const sTimeVal = servicingTime.value
   const tGapVal = TimeGap.value
-  const idVal = Id.value
+  const idVal = Id.value.split(' ').join('')
 
   if (isNumber(sTimeVal)) {
     servicingTime.style.border = '1px solid black'

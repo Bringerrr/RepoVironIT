@@ -2,10 +2,9 @@ import emitter from '../other/EventEmitterSingleton.js'
 import AtmButtonRender from './atmButtonRender.js'
 
 export default class AtmButton {
-  constructor(container, eventName, className) {
+  constructor(container, eventName, id) {
     this.container = container
-    this.id = eventName
-    this.className = className // Наименование класса
+    this.id = id
     this.eventName = eventName
     this.render = null
   }

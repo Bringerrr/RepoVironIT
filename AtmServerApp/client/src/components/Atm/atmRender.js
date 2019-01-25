@@ -10,14 +10,15 @@ export default class AtmRender extends Component {
     this.template
     this.oldTemplate = {}
     this.variables
-
     emitter.on(`RENDER_COMPONENT_ATM_${this.id}`, function(data) {
+      // console.log(data.variables)
       self.render(
         data.state,
         self.createNewTemplate(data.variables),
         self.oldTemplate,
         data.selector,
-        id
+        id,
+        data.events
       )
     })
   }
