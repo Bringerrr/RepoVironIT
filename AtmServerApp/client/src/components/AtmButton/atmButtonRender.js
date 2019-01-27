@@ -9,7 +9,7 @@ export default class atmButtonRender extends Component {
     this.id = id
     this.oldTemplate = {}
     emitter.on(`RENDER_COMPONENT_ATM_BUTTON_${self.id}`, function(data) {
-      console.log(data.events)
+      // console.log(data.events)
       self.render(
         data.state,
         self.createNewTemplate(id),

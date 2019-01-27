@@ -44,7 +44,7 @@ router.delete("/:id", (req, res) => {
 
 // @route   POST api/atm/change/:id/:increment
 // @desc    Increase atm's count
-router.post("/change/:id/:increment", (req, res) => {
+router.put("/change/:id/:increment", (req, res) => {
   Atm.findOne({ id: req.params.id })
     .then(atm => {
       atm.count += parseInt(req.params.increment);

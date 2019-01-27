@@ -1,5 +1,5 @@
 import Queue from './Queue/queue.js'
-import Form from './other/Form'
+import Form from './other/Form' // В форме осуществляется манипуляция с АТМ-ами
 
 import { Router } from './other/Router'
 
@@ -7,20 +7,12 @@ import { Router } from './other/Router'
 Router.config({ mode: 'history' })
 
 // adding routes
-Router.add(/about/, function() {
-  console.log('about')
+Router.add(/atm\/(.*)/, function(x) {
+  console.log(x)
+  console.log('atm', arguments)
 })
-  .add(/products\/(.*)\/edit\/(.*)/, function() {
-    console.log('products', arguments)
-  })
-  .add(function() {
-    console.log('default')
-  })
-  //   .check('/about')
+  //   .check('/atm')
   .listen()
-
-// forwarding
-// Router.navigate('/about')
 
 const queueContaier = document.getElementById('queue')
 

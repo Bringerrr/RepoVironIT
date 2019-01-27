@@ -4,7 +4,7 @@ export const Router = {
   root: '/',
   config: function(options) {
     this.mode =
-      options && options.mode && options.mode == 'history' && !!history.pushState
+      options && options.mode && options.mode === 'history' && !!history.pushState
         ? 'history'
         : 'hash'
     this.root = options && options.root ? '/' + this.clearSlashes(options.root) + '/' : '/'
@@ -15,7 +15,7 @@ export const Router = {
     if (this.mode === 'history') {
       fragment = this.clearSlashes(decodeURI(location.pathname + location.search))
       fragment = fragment.replace(/\?(.*)$/, '')
-      fragment = this.root != '/' ? fragment.replace(this.root, '') : fragment
+      fragment = this.root !== '/' ? fragment.replace(this.root, '') : fragment
     } else {
       var match = window.location.href.match(/#(.*)$/)
       fragment = match ? match[1] : ''

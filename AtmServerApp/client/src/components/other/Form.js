@@ -4,7 +4,6 @@ import isNumber from './isNumber'
 import isEmpty from './isEmpty'
 
 import Atm from '../Atm/atm.js'
-import AtmPopup from '../AtmPopup/AtmPopup.js'
 
 const mainContainer = document.getElementById('atmContainer')
 

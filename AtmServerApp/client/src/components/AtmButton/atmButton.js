@@ -11,11 +11,20 @@ export default class AtmButton {
 
   init() {
     this.render = new AtmButtonRender(this.id)
+  }
 
+  show() {
+    console.log('BUTTON SHOWED')
     emitter.emit(
       `RENDER_COMPONENT_ATM_BUTTON_${this.id}`,
       this.getDataForRendering('firstTimeRender')
     )
+  }
+
+  hide() {
+    console.log('BUTTON HIDDEN')
+    console.log('button has been hidden')
+    emitter.emit(`RENDER_COMPONENT_ATM_BUTTON_${this.id}`, this.getDataForRendering('delete'))
   }
 
   getDataForRendering(state) {
