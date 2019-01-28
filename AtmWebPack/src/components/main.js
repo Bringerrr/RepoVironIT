@@ -8,7 +8,7 @@ const formContainer = document.getElementById('formContainer')
 // formContainer.innerHTML
 formContainer.appendChild(Form)
 
-const queueSize = 5 // Длинна очереди
+const queueSize = 15 // Длинна очереди
 
 // общие классы для всех банкоматов
 const classNames = {

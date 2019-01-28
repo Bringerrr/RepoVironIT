@@ -7,10 +7,11 @@ export default class AtmRender extends Component {
     super()
     let self = this
     this.id = id
-    this.template
+    this.template // = null ?
     this.oldTemplate = {}
-    this.variables
+    this.variables // = null ?
 
+    // лучше заменить на () => {} и убрать self
     emitter.on(`RENDER_COMPONENT_ATM_${this.id}`, function(data) {
       self.render(
         data.state,

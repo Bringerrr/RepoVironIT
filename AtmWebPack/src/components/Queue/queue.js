@@ -12,6 +12,7 @@ export default class Queue {
 
     this.render = null
 
+    // лучше заменить на (atm) => {
     emitter.on('AtmIsFree', function(atm) {
       if (self.amount > 0) {
         self.move()

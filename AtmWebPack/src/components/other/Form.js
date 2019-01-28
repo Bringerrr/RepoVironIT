@@ -8,7 +8,7 @@ let formState = {}
 
 const createElementFromHTML = function(htmlString) {
   if (htmlString === '') console.log(htmlString)
-  var div = document.createElement('div')
+  var div = document.createElement('div') // const
   div.innerHTML = htmlString.trim()
 
   // Change this to div.childNodes to support multiple top-level nodes
@@ -17,6 +17,7 @@ const createElementFromHTML = function(htmlString) {
 
 let DOMtemplate = createElementFromHTML(template)
 
+// Не работает
 const createAtm = function(e) {
   e.preventDefault()
 
@@ -57,6 +58,7 @@ const createAtm = function(e) {
     if (err === 0) {
       formState[Id.value] = { TimeGap: TimeGap.value, servicingTime: servicingTime.value }
     }
+    // debug вывод должен быть с описанием
     console.log(formState)
     console.log(err)
   }

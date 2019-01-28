@@ -1,5 +1,5 @@
 const events = require('events')
-
+// Можно заменить на const { EventEmitter }  = req...
 const EventEmitter = events.EventEmitter
 
 const Emitter = function(...args) {
@@ -10,6 +10,7 @@ const Emitter = function(...args) {
   EventEmitter.call(this)
 }
 
+// Не используй __proto__
 Emitter.prototype.__proto__ = EventEmitter.prototype
 
 module.exports = new Emitter()
