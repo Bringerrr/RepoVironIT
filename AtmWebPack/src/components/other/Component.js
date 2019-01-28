@@ -2,6 +2,8 @@ import emitter from '../other/EventEmitterSingleton.js'
 
 export default class Component {
   constructor() {
+    // лучше вынести в class
+    // state вынести как ENUM (state = { STEATE1: 'STEATE1' })
     this.render = function(state, newTemplate, oldTemplate, selector, id, event) {
       let newTempDom = this.createElementFromHTML(newTemplate)
 
@@ -42,7 +44,7 @@ export default class Component {
   }
 
   createElementFromHTML(htmlString) {
-    var div = document.createElement('div')
+    var div = document.createElement('div') // const
     div.innerHTML = htmlString.trim()
 
     // Change this to div.childNodes to support multiple top-level nodes

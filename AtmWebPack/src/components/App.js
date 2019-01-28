@@ -1,9 +1,10 @@
 import '../styles/main.css'
 
+// Что это? o_o
 console.log(parseInt('wer'))
 
 function createTag(tagName, id, className, inner, parent) {
-  let elem = document.createElement(tagName)
+  let elem = document.createElement(tagName) // const
   elem.id = id
   elem.innerHTML = inner
   elem.className = className
