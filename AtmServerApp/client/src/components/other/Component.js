@@ -1,24 +1,18 @@
 import emitter from '../other/EventEmitterSingleton.js'
 
+import { RENDER_FIRST_TIME, RENDER_UPDATE, RENDER_DELETE } from '../other/Actions'
+
 export default class Component {
   constructor() {
-    this.render = function(state, newTemplate, oldTemplate, selector, id, event) {
+    this.render = function(state, newTemplate, oldTemplate, selector, id, events) {
       let newTempDom = this.createElementFromHTML(newTemplate)
-      // console.log(newTempDom)
 
-      if (state === 'firstTimeRender') {
-        if (newTemplate.indexOf('POPUP') + 1) {
-          // console.log(selector)
-        }
+      if (state === RENDER_FIRST_TIME) {
         // First time render element
         selector.appendChild(newTempDom)
       }
 
-      if (state === 'update') {
-        // if (newTemplate.indexOf('POPUP') + 1) {
-        //   console.log(selector)
-        // }
-
+      if (state === RENDER_UPDATE) {
         // Update
         if (selector.innerHTML.indexOf(oldTemplate) + 1) {
           if (newTempDom === null) {
@@ -29,50 +23,24 @@ export default class Component {
         }
       }
 
-      // if (event.onclick.indexOf('data.variables.event') + 1) {
-      //   console.log(event.onclick)
-      //   console.log(selector)
-      // }
-
-      if (event) {
-        // Add Event Listeners
-        if (event.onclick.indexOf('RENDER_COMPONENT_ATM_SHOW_POPUP') + 1) {
-          // console.log('delete state go ------------------->')
-          // console.log(document.getElementById('popupContainer'))
-          // document.getElementById('popupContainer').addEventListener(
-          //   'click',
-          //   e => {
-          //     e.preventDefault()
-          //     e.stopePropagation()
-          //     if (event.onclick.indexOf('DELETE') + 1) {
-          //       e.currentTarget.style.display = 'none'
-          //     }
-          //     console.log(event.onclick, state)
-          //     emitter.emit(event.onclick, state)
-          //   },
-          //   true
-          // )
-          //   document.getElementById('popupContainer').addEventListener('click', function(event) {
-          //   event.preventDefault()
-          //   if (event.target !== selector && event.target.parentNode !== selector) {
-          //     console.log('sadasdasd')
-          //   }
-          // })
-        }
+      if (events) {
+        // Add Event Listener
         selector.querySelector(`#${id}`).addEventListener('click', e => {
-          e.preventDefault()
-          if (event.onclick.indexOf('DELETE') + 1) {
-            e.currentTarget.style.display = 'none'
+          if (typeof events.onclick === 'object' && events.onclick.length > 1) {
+            events.onclick.forEach(event => {
+              emitter.emit(event, state)
+            })
+          } else {
+            emitter.emit(events.onclick, state)
           }
-          // console.log(event.onclick, state)
-          emitter.emit(event.onclick, state)
         })
+        // }
+      }
 
-        if (state === 'delete') {
-          // Delete
-          if (selector.innerHTML.indexOf(oldTemplate) + 1) {
-            selector.removeChild(selector.querySelector(`#${id}`))
-          }
+      if (state === RENDER_DELETE) {
+        // Delete
+        if (selector.innerHTML.indexOf(oldTemplate) + 1) {
+          selector.removeChild(selector.querySelector(`#${id}`))
         }
       }
 
@@ -81,10 +49,8 @@ export default class Component {
   }
 
   createElementFromHTML(htmlString) {
-    var div = document.createElement('div')
+    const div = document.createElement('div')
     div.innerHTML = htmlString.trim()
-
-    // Change this to div.childNodes to support multiple top-level nodes
     return div.firstChild
   }
 }

@@ -4,6 +4,7 @@ import Form from './other/Form' // В форме осуществляется м
 import { Router } from './other/Router'
 
 // configuration
+// Router not yet realized
 Router.config({ mode: 'history' })
 
 // adding routes
@@ -19,10 +20,21 @@ const queueContaier = document.getElementById('queue')
 // Форма инициализирует и управляет АТМ-ами
 const formContainer = document.getElementById('formContainer')
 
+// Controller for queue
+const queueController = document.getElementById('queue_controller')
+
+queueController.outerHTML = `<input id="queue_controller" placeholder="Появление человека в очереди(мс)" class="queue_controller">`
+
 // formContainer.innerHTML
 formContainer.appendChild(Form)
 
-const queueSize = 0 // Длинна очереди
+const queueSize = 15 // Длинна очереди
 
 // Инициализация очереди
-new Queue(queueContaier, queueSize, 'queueForAtm').init()
+const queueObj = new Queue(queueContaier, queueSize, 'queueForAtm')
+queueObj.init()
+
+queueController.addEventListener('change', e => {
+  e.preventDefault()
+  queueObj.increseGrowingSpeed(e.target.value)
+})

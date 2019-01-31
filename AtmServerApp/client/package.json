@@ -1,7 +1,6 @@
 {
-  "name": "webpack-simple-example",
+  "name": "atmFlowApp",
   "version": "1.0.0",
-  "description": "Just a quick and dirty example on how Webpack is integrated into the project, and how to use without any frameworks or libraries.",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode=development",
@@ -10,10 +9,7 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src --fix"
   },
-  "repository": "https://github.com/superjose/webpack-simple-example.git",
-  "author": "Jose Asilis <superjose_49@hotmail.com>",
   "license": "MIT",
-  "private": false,
   "dependencies": {
     "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",

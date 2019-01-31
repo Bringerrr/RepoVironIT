@@ -8,7 +8,7 @@ export default class QueueRender extends Component {
     this.id = id
     this.containerId = `queueContainer`
     this.oldTemplate = {}
-    emitter.on('RENDER_COMPONENT_QUEUE', function(data) {
+    emitter.on('RENDER_COMPONENT_QUEUE', data => {
       self.render(
         data.state,
         self.createNewTemplate(data.variables, data.count),

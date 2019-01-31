@@ -7,8 +7,6 @@ import Atm from '../Atm/atm.js'
 
 const mainContainer = document.getElementById('atmContainer')
 
-// const popup = new AtmPopup(mainContainer, 'Popup')
-
 const template =
   '<form id="formContainer"><input id="servisingTime" placeholder="Время oбслуживание (мс)"><span></span></br></input><input id="timeGap" placeholder="Время задержки (мс)"><span></span></br></input><input id="atmID" placeholder="ID"></input><span></span></br><button id="form_button-create" class="button-create" value="Добавить">Добавить</button></form>'
 
@@ -19,13 +17,6 @@ const classNames = {
   clientAtAtm: 'clientAtAtm'
 }
 
-// Пропсы на случай ошибки фетч запроса
-const defProps = [
-  { id: 'atmNew1', servisingTime: 1320, timeGap: 2000 },
-  { id: 'atmNew2', servisingTime: 1920, timeGap: 2000 },
-  { id: 'atmNew3', servisingTime: 2900, timeGap: 2000 }
-]
-
 let props = [] // props для хранения текущих атрибутов ATM объектов
 
 const hideSpiner = () => {
@@ -33,13 +24,13 @@ const hideSpiner = () => {
   Spinner.style.display = 'none'
 }
 
-const getProps = async () => {
+const fetchGetProps = async () => {
   await axios
     .get(`http://localhost:5000/api/atm`)
     .then(res => (props = res.data))
     .then(res => hideSpiner())
     .catch(err => {
-      props = defProps
+      hideSpiner()
       return err
     })
 
@@ -56,7 +47,7 @@ const getProps = async () => {
   })
 }
 
-const createAtm = async body => {
+const fetchCreateAtm = async body => {
   await axios
     .post(`http://localhost:5000/api/atm`, body)
     .then(res => res)
@@ -64,7 +55,6 @@ const createAtm = async body => {
 }
 
 const createElementFromHTML = function(htmlString) {
-  if (htmlString === '') console.log(htmlString)
   var div = document.createElement('div')
   div.innerHTML = htmlString.trim()
   return div.firstChild
@@ -135,17 +125,27 @@ const validation = function(e) {
       Id.style.border = '1px solid black'
       Id.nextSibling.innerHTML = ''
     }
+
+    if (isNumber(idVal)) {
+      Id.style.border = '1px solid red'
+      Id.nextSibling.innerHTML = 'Требуется строка'
+      err += 1
+    }
   }
 
   if (err === 0) {
     let atmAttributes = {
+      // getting attributes for atm from inputs
       id: idVal,
       servicingTime: parseInt(sTimeVal),
       timeGap: parseInt(tGapVal),
       count: 0
     }
-    props.push(atmAttributes)
+
+    props.push(atmAttributes) // save attrubutes in props
+
     createInitializedAtm(
+      // create and init new atm on page
       mainContainer,
       parseInt(sTimeVal),
       parseInt(tGapVal),
@@ -154,8 +154,9 @@ const validation = function(e) {
       0,
       Atm
     )
-    createAtm(atmAttributes)
-    console.log(props)
+
+    fetchCreateAtm(atmAttributes) // writting down new ATM at DB
+
     return true
   }
 
@@ -167,7 +168,7 @@ const validation = function(e) {
 
 let DOMtemplate = createElementFromHTML(template)
 
-getProps() // Запрашиваем АТМ-ы
+fetchGetProps() // Запрашиваем АТМ-ы
 
 DOMtemplate.querySelector('#form_button-create').addEventListener('click', validation, false)
 

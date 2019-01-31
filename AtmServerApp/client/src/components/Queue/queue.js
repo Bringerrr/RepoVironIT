@@ -1,6 +1,15 @@
 import emitter from '../other/EventEmitterSingleton.js'
 import QueueRender from './queueRender.js'
 
+import {
+  QUEUE_CLIENT_ENTERED,
+  RENDER_COMPONENT_QUEUE,
+  ATM_IS_FREE,
+  RENDER_FIRST_TIME,
+  RENDER_UPDATE,
+  RENDER_DELETE
+} from '../other/Actions'
+
 export default class Queue {
   constructor(container, size, id) {
     let self = this
@@ -8,15 +17,23 @@ export default class Queue {
     this.amount = size
     this.container = container // Контейнер для очереди
 
-    this.flow = null
+    this.flow = null // скорость добавление клиентов в очередь
     this.render = null
 
-    emitter.on('AtmIsFree', function(atm) {
+    emitter.on(ATM_IS_FREE, function(atm) {
       if (self.amount > 0) {
         self.move()
-        emitter.emit('clientEntered', atm)
+        emitter.emit(QUEUE_CLIENT_ENTERED, atm)
       }
     })
+  }
+
+  increseGrowingSpeed(ms) {
+    clearInterval(this.flow)
+    this.flow = setInterval(() => {
+      this.amount += 1
+      this.update()
+    }, ms)
   }
 
   getDataForRendering(state) {
@@ -35,15 +52,15 @@ export default class Queue {
       this.update()
     }, 1000)
 
-    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering('firstTimeRender'))
+    emitter.emit(RENDER_COMPONENT_QUEUE, this.getDataForRendering(RENDER_FIRST_TIME))
   }
 
   update() {
-    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering('update'))
+    emitter.emit(RENDER_COMPONENT_QUEUE, this.getDataForRendering(RENDER_UPDATE))
   }
 
   delete() {
-    emitter.emit('RENDER_COMPONENT_QUEUE', this.getDataForRendering('delete'))
+    emitter.emit(RENDER_COMPONENT_QUEUE, this.getDataForRendering(RENDER_DELETE))
   }
 
   // Движение очереди

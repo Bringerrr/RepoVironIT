@@ -3,6 +3,14 @@ import emitter from '../other/EventEmitterSingleton.js'
 import AtmPopupRender from './AtmPopupRender.js'
 import AtmButton from '../AtmButton/atmButton.js'
 
+import {
+  ATM_POPUP_DELETE_BUTTON,
+  RENDER_COMPONENT_POPUP,
+  RENDER_FIRST_TIME,
+  RENDER_DELETE,
+  RENDER_COMPONENT_ATM_SHOW_POPUP
+} from '../other/Actions'
+
 import { Router } from '../other/Router'
 
 export default class AtmPopup {
@@ -15,32 +23,26 @@ export default class AtmPopup {
     this.count = 0
     this.isShowed = false
 
-    Router.add(function() {
-      console.log(self.id)
-    })
+    this.deleteButton = null
   }
 
   init() {
     this.render = new AtmPopupRender(this.id, this.eventName)
     this.deleteButton = new AtmButton(
       this.container,
-      `ATM_POPUP_DELETE_BUTTON_${this.id}`,
-      `ATM_POPUP_DELETE_BUTTON_${this.id}`
+      [`${ATM_POPUP_DELETE_BUTTON}_${this.id}`, `${RENDER_COMPONENT_POPUP}_${this.id}`],
+      `${ATM_POPUP_DELETE_BUTTON}_${this.id}`
     )
     this.deleteButton.init()
   }
 
   toggle(count) {
-    console.log(`ATM+POPUP_TOGGLED`)
     this.count = count // передаем значение из нажатого атм-а
     this.isShowed = !this.isShowed
-    console.log(`isShowed`, this.isShowed)
     if (this.isShowed === true) {
-      console.log('created')
       this.firstTimeRender()
       this.deleteButton.show()
       Router.navigate(`/atm/${this.id}`, 'Test') // forwarding
-      // this.mainContainer.addEventListener('click', this.test, true)
     }
     if (this.isShowed === false) {
       console.log('deleting')
@@ -48,21 +50,18 @@ export default class AtmPopup {
       this.delete()
       this.deleteButton.hide()
       Router.navigate(``) // forwarding
-      // this.mainContainer.removeEventListener('click', this.toggle, true)
     }
   }
 
   firstTimeRender() {
-    emitter.emit(`RENDER_COMPONENT_POPUP_${this.id}`, this.getDataForRendering('firstTimeRender'))
+    emitter.emit(
+      `${RENDER_COMPONENT_POPUP}_${this.id}`,
+      this.getDataForRendering(RENDER_FIRST_TIME)
+    )
   }
 
   delete() {
-    emitter.emit(`RENDER_COMPONENT_POPUP_${this.id}`, this.getDataForRendering('delete'))
-  }
-
-  hide() {
-    console.log(this.id, ' now is hidden')
-    emitter.emit(`RENDER_COMPONENT_ATM_POPUP_${this.id}`, this.getDataForRendering('delete'))
+    emitter.emit(`${RENDER_COMPONENT_POPUP}_${this.id}`, this.getDataForRendering(RENDER_DELETE))
   }
 
   getDataForRendering(state) {

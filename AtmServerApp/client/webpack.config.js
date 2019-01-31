@@ -24,7 +24,8 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg)$/i,
         loader: 'file-loader',
         options: { name: 'img/[name].[ext]' }
-      }
+      },
+      { test: /\.handlebars$/, loader: 'handlebars-loader' }
     ]
   },
   plugins: [new HtmlWebpackPlugin()]

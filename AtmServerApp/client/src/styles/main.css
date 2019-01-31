@@ -33,6 +33,7 @@ body > * {
   justify-content: space-evenly;
   background-color: grey;
   max-height: 900px;
+  position: relative;
 }
 
 .mainContainer > .atmContainer {
@@ -91,12 +92,21 @@ body > * {
 
 .queue > .queueContainer {
   width: 100%;
+  position: relative;
 }
 
 .queue > #queueContainer > div {
   height: 60px;
   margin-bottom: 20px;
   background-color: black;
+}
+
+.mainContainer > .queue_controller {
+  width: 250px;
+  position: absolute;
+  height: 40px;
+  top: 0;
+  text-align: center;
 }
 
 #formContainer {

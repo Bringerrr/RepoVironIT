@@ -1,6 +1,8 @@
 import emitter from '../other/EventEmitterSingleton.js'
 import AtmButtonRender from './atmButtonRender.js'
 
+import { RENDER_COMPONENT_ATM_BUTTON, RENDER_FIRST_TIME, RENDER_DELETE } from '../other/Actions'
+
 export default class AtmButton {
   constructor(container, eventName, id) {
     this.container = container
@@ -14,19 +16,19 @@ export default class AtmButton {
   }
 
   show() {
-    console.log('BUTTON SHOWED')
+    console.log(`getDataForRendering`, this.getDataForRendering(RENDER_FIRST_TIME))
     emitter.emit(
-      `RENDER_COMPONENT_ATM_BUTTON_${this.id}`,
-      this.getDataForRendering('firstTimeRender')
+      `${RENDER_COMPONENT_ATM_BUTTON}_${this.id}`,
+      this.getDataForRendering(RENDER_FIRST_TIME)
     )
   }
 
   hide() {
-    console.log('BUTTON HIDDEN')
-    console.log('button has been hidden')
-    emitter.emit(`RENDER_COMPONENT_ATM_BUTTON_${this.id}`, this.getDataForRendering('delete'))
+    emitter.emit(
+      `${RENDER_COMPONENT_ATM_BUTTON}_${this.id}`,
+      this.getDataForRendering(RENDER_DELETE)
+    )
   }
-
   getDataForRendering(state) {
     return {
       state: state,
@@ -34,9 +36,7 @@ export default class AtmButton {
       variables: {
         id: this.id
       },
-      events: {
-        onclick: this.eventName
-      }
+      events: { onclick: this.eventName }
     }
   }
 }

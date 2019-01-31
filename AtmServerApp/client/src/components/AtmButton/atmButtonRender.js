@@ -2,13 +2,15 @@ import './atmButtonRender.css'
 import emitter from '../other/EventEmitterSingleton.js'
 import Component from '../other/Component'
 
+import { RENDER_COMPONENT_ATM_BUTTON } from '../other/Actions'
+
 export default class atmButtonRender extends Component {
   constructor(id) {
     super()
     let self = this
     this.id = id
     this.oldTemplate = {}
-    emitter.on(`RENDER_COMPONENT_ATM_BUTTON_${self.id}`, function(data) {
+    emitter.on(`${RENDER_COMPONENT_ATM_BUTTON}_${self.id}`, data => {
       // console.log(data.events)
       self.render(
         data.state,
